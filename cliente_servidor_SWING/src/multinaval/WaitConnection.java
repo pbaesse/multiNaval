@@ -19,9 +19,12 @@ public class WaitConnection implements Runnable {
     public void run() {
         while (true) {
             try {
+                // Esperando conexão
                 Socket client = this.server.accept();
                 String ipClient = client.getInetAddress().getHostAddress();
 
+                // Avisando ao servidor que o cliente conectou-se, e logo após o adiciona na lista
+                // de jogadores online;
                 serverClass.addText("Conexão estabelecida com Cliente [" + ipClient + "]\n");
                 serverClass.getPlayerList().add(client);
 

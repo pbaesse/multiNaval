@@ -33,10 +33,12 @@ public class Transmitter implements Runnable {
     
     private void checkPlayerList() {
         String answer = "";
+        // Analisa a lista de jogadores online e a formata de forma que possa ser transmitida
         for (Socket c : server.getPlayerList()) {
             answer = answer + c.getInetAddress().getHostAddress() + " ";
         }
 
+        // Envia para o cliente;
         writer.println("PlayerList " + answer);
     }
     
@@ -52,16 +54,11 @@ public class Transmitter implements Runnable {
     }
     
     private void sendMessage(String request) throws IOException {
-        System.out.println("Como chegou em sendMessage: " + request);
+        // Recorta a mensagem, de forma a separar IP, Mensagem e quem quer envia-la
         String[] dados = request.split("/");
         boolean sent = false;
         
-        for(int i = 0; i < dados.length; i++) {
-            System.out.println("dados[" + i + "]: " + dados[i]);
-        }
-        
-        System.out.println("Saiu do for: " + request);
-        
+        // Procura pelo cliente de IP indicado para enviar a mensagem
         for(Socket c : server.getPlayerList()) {
             if(dados[2].equals(c.getInetAddress().getHostAddress())) {
                 new PrintStream(c.getOutputStream()).println("RECEIVED/" + yourIP +
@@ -70,12 +67,14 @@ public class Transmitter implements Runnable {
             }
         }
         
+        // Caso o IP não esteja presente nesta lista, avisa ao Cliente
         if(!sent) {
             writer.println("UNKNOWN HOST");
         }
     }
     
     public void processRequest(String request) throws IOException {
+    // Criar routes para os requests; Rotas para os pedidos;
         if (request.equals("SEND PlayerList")) {
             checkPlayerList();
         } else if (request.equals("QUIT")) {
@@ -93,6 +92,7 @@ public class Transmitter implements Runnable {
     public void run() {
         while (keepRunning) {
             try {
+                // Lê pedidos do cliente;
                 String request = reader.readLine();
                 processRequest(request);
             } catch (IOException e) {

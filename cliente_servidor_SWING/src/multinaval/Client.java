@@ -78,6 +78,8 @@ public class Client extends javax.swing.JFrame {
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
         try {
+            // Ao clicar no botão conectar o Socket é criado com as informações concebidas
+            // E logo em seguida, o lobby também é criado.
             Socket client = new Socket(txtIP.getText(), Integer.parseInt(txtPort.getText()));
             
             new Lobby(client).setVisible(true);

@@ -18,11 +18,14 @@ public class ConnectionList implements Runnable {
     @Override
     public void run() {
         while (true) {
+            //Envia pedido ao servidor. O cliente está pedindo a lista de jogadores conectados
             writer.println("SEND PlayerList");
             
             try {
+                //Recebendo do servidor;
                 String received = reader.readLine();
 
+                //Se o recebido for a lista de jogadores conectados, ele atualiza o lobby
                 if (received.contains("PlayerList")) {
                     String[] who = received.split(" ");
 
@@ -32,6 +35,7 @@ public class ConnectionList implements Runnable {
                     for (int i = 1; i < who.length; i++) {
                         lobbylist.addElement(who[i]);
                     }
+                // Se a mensagem recebida conter uma mensagem de outro jogador;    
                 } else if (received.contains("RECEIVED")) {
                     String[] identify = received.split("/");
                     lobby.createPopup("[Jogador " + identify[1] + "]: " + identify[2]);

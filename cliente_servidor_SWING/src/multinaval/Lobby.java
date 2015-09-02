@@ -16,17 +16,18 @@ public class Lobby extends javax.swing.JFrame {
         this.client = client;
 
         try {
+            // Cria o fluxo de dados com interfaces com suporte a String;
             writer = new PrintStream(client.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         } catch (IOException ex) {
             System.out.println("Error: " + ex);
         }
 
+        // Atualiza a porta e o ip do cliente no Lobby
         labelIp.setText(client.getInetAddress().getHostAddress());
         labelPort.setText("" + client.getLocalPort());
 
         startThreads();
-
     }
 
     public void createPopup(String message) {
@@ -167,6 +168,7 @@ public class Lobby extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btQuitActionPerformed
+        // Comandos para encerrar o Lobby e não deixar dependências;
         writer.println("QUIT");
         this.dispose();
     }//GEN-LAST:event_btQuitActionPerformed
@@ -178,6 +180,7 @@ public class Lobby extends javax.swing.JFrame {
         String msg = JOptionPane.showInputDialog("Digite sua mensagem", message);
         String toIp = JOptionPane.showInputDialog("Para que IP deseja enviar?", toIP);
 
+        // Envia mensagem digitada para o IP também digitado;
         writer.println("CHAT/" + msg + "/" + toIp);
 
     }//GEN-LAST:event_btChatActionPerformed

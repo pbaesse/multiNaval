@@ -127,6 +127,7 @@ public class Server extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btShutdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShutdownActionPerformed
+    // Função de desligamento do servidor. Atualmente desativada;
         System.out.println("Encerrando servidor ...");
         for (Socket c : playerList) {
             try {
