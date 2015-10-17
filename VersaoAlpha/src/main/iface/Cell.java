@@ -3,12 +3,25 @@ package main.iface;
 import javax.swing.JButton;
 
 public class Cell {
-    private JButton button = new JButton();
-    private Boolean booleano = false, booleanTiro = false;
+    private JButton button;
+    private boolean isClicked;
+    private boolean isShotted;
+    private String cellName;
 
     public Cell() { 
+        button = new JButton();
+        isClicked = false;
+        isShotted = false;
     }
 
+    public void setCellName(String name) {
+        this.cellName = name;
+    }
+    
+    public String getCellName() {
+        return cellName;
+    }
+    
     public JButton getButton() {
         return button;
     }
@@ -17,18 +30,18 @@ public class Cell {
         this.button = button;
     }
     
-    public Boolean getBooleano() {
-        return booleano;
+    public Boolean isClicked() {
+        return isClicked;
     }
 
-    public void setBooleano(Boolean booleano) {
-        this.booleano = booleano;
+    public void setClicked(boolean isClicked) {
+        this.isClicked = isClicked;
     }
     
-    public Boolean getBooleanTiro() {
-        return booleanTiro;
+    public Boolean isShotted() {
+        return isShotted;
     }
-    public void setBooleanTiro(Boolean booleanTiro) {
-        this.booleanTiro = booleanTiro;
+    public void setShotted(boolean isShotted) {
+        this.isShotted = isShotted;
     }
 }
