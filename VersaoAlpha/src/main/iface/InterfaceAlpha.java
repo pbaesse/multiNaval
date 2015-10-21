@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import main.resources.Inbox;
@@ -46,8 +45,10 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private final Socket connection;
     private final PrintStream writer;
     private final BufferedReader reader;
+    private boolean gameStarted = false;
     private boolean enemyReady = false;
     private boolean ready = false;
+    private boolean myTurn = false;
     
     // Ship attributes
     private int shipLength;
@@ -88,26 +89,39 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         enemyTable = new Cell[11][11];
         createTable(30, 90, userPanel, userTable);
         createShips();
-        //createTable(575, 95, enemyPanel, enemyTable);
     }
     
     private void createThreads() throws IOException {
         new Thread(new Inbox(this, connection)).start();
         new Thread(() -> {
-            System.out.println("Iniciando thread dos ready");
-            
-            while(!gameOver) {
+            while(!gameStarted) {
                 if (enemyReady && ready) {
-                    repaint();
-                    revalidate();
+                    new Thread(() -> {
+                        while(!gameOver) {
+                            if (!myTurn) {
+                                // Bloqueia ações
+                            }
+                        
+                            repaint();
+                            revalidate();
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                System.out.println("Error (Thread CheckIn): " + ex);
+                            }
+                        }
+                    }).start();
+                    
+                    this.gameStarted = true;
                 }
-                
+        
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Error (Thread CheckIn): " + ex);
                 }
-            }        
+            }
         }).start();
         
         new Thread(() -> {
@@ -370,7 +384,6 @@ public class InterfaceAlpha extends javax.swing.JFrame {
 
                 setShipsHitted(getShipsHitted() + 1);
                 position.setShotted(true);
-                System.out.println(" hitted ships: " + getShipsHitted());
             } else {
                 position.getButton().setVisible(false);
             }
@@ -661,13 +674,10 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         gameOver = true;
         
         writer.close();
-        System.out.println("Writer finalizado");
         
         reader.close();
-        System.out.println("Reader finalizado");
         
         connection.close();
-        System.out.println("Conexão finalizada");
         
         this.dispose();
         System.exit(0);
