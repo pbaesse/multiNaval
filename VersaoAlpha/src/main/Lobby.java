@@ -1,16 +1,13 @@
 package main;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import main.resources.KnockNetwork;
 
 /**
- *
  * @author luann
  */
-public class Lobby extends javax.swing.JFrame {
+public final class Lobby extends javax.swing.JFrame {
 
     /**
      * Creates new form Lobby
@@ -28,7 +25,7 @@ public class Lobby extends javax.swing.JFrame {
             DefaultListModel oldList = new DefaultListModel();
 
             try {
-                for (String host : new KnockNetwork("10.164.3", 500).run()) {
+                for (String host : new KnockNetwork("10.164.5", 500).run()) {
                     list.addElement(host);
                 }
 

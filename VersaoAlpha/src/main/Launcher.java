@@ -109,7 +109,7 @@ public class Launcher extends javax.swing.JFrame {
             System.out.println("Conectado ao ip " + connection.getInetAddress().getHostAddress());    
             
             this.dispose();
-            new InterfaceAlpha(connection).setVisible(true);
+            new InterfaceAlpha(connection, true).setVisible(true);
         } catch (IOException ex) {
             System.out.println("Erro wait: " + ex);
         }
@@ -123,7 +123,7 @@ public class Launcher extends javax.swing.JFrame {
         try {
             Socket connection = new Socket(ip, port);
             this.dispose();
-            new InterfaceAlpha(connection).setVisible(true);
+            new InterfaceAlpha(connection, false).setVisible(true);
         } catch (IOException ex) {
             System.out.println("Erro connect: " + ex);
         }

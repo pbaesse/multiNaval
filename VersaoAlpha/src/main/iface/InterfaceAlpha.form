@@ -45,9 +45,13 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="yourIP" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="420" max="32767" attributes="0"/>
+                      <EmptySpace pref="463" max="32767" attributes="0"/>
                       <Component id="enemyIP" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="labelTurn" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -56,12 +60,14 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <Component id="labelTurn" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="yourIP" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="enemyIP" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="482" max="32767" attributes="0"/>
+              <EmptySpace pref="497" max="32767" attributes="0"/>
               <Component id="btnReady" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -79,12 +85,23 @@
     </Component>
     <Component class="javax.swing.JLabel" name="yourIP">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Ubuntu" size="15" style="0"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="xxx.xxx.xxx.xxx"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="enemyIP">
       <Properties>
         <Property name="text" type="java.lang.String" value="xxx.xxx.xxx.xxx"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelTurn">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Ubuntu" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&#xc9; a vez de ..."/>
       </Properties>
     </Component>
   </SubComponents>

@@ -61,8 +61,6 @@ public class Inbox implements Runnable {
                 
                 counter++;
             }
-            
-            System.out.println();
         }
     }
 
@@ -71,7 +69,6 @@ public class Inbox implements Runnable {
         while(!iface.isGameOver()) {            
             try {
                 String message = reader.readLine();
-                System.out.println(message);
                 
                 if(message.equals("READY")) {
                     iface.setEnemyReady(true); 
@@ -85,6 +82,9 @@ public class Inbox implements Runnable {
                     iface.gameOver();
                     reader.close();
                     connection.close();
+                } else if(message.equals("YOUR TURN")) {
+                    iface.setTurn(true);
+                    iface.displayMessage("É seu turno!");
                 }
             } catch (SocketException ex) {
                 try {

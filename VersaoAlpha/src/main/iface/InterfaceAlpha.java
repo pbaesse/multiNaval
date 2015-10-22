@@ -8,6 +8,7 @@ package main.iface;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,6 +38,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private final JPanel userPanel;
     private final JPanel enemyPanel;
 
+    private int attacks = 0;
     private boolean gameOver = false;
     private String side = "Horizontal";
     private final String invalidMessage = "Posição inválida.";
@@ -66,10 +68,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     /**
      * Creates new form InterfaceAlpha
      * @param connection
+     * @param iStart
      * @throws java.io.IOException
      */
-    public InterfaceAlpha(Socket connection) throws IOException {
+    public InterfaceAlpha(Socket connection, boolean iStart) throws IOException {
         initComponents();
+        
+        if (iStart) myTurn = true;
         
         this.connection = connection;
         
@@ -91,17 +96,36 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         createShips();
     }
     
+    
+    /*
+     * Private Methods  
+     */
+    
     private void createThreads() throws IOException {
         new Thread(new Inbox(this, connection)).start();
+        
+        // Check if both of players are ready
         new Thread(() -> {
             while(!gameStarted) {
-                if (enemyReady && ready) {
+                if (enemyReady && ready) {                    
+                    // Check the turns
                     new Thread(() -> {
                         while(!gameOver) {
-                            if (!myTurn) {
-                                // Bloqueia ações
+                            
+                            if (myTurn) {
+                                labelTurn.setText("Turno: você");
+                                
+                                if (attacks >= 3) {
+                                    myTurn = false;                                    
+                                    writer.println("YOUR TURN");
+                                    attacks = 0;
+                                    yourIP.setFocusable(false);
+                                    labelTurn.setText("Turno: oponente");
+                                }
+                            } else {
+                                labelTurn.setText("Turno: oponente");
                             }
-                        
+                                
                             repaint();
                             revalidate();
 
@@ -109,13 +133,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ex) {
                                 System.out.println("Error (Thread CheckIn): " + ex);
-                            }
+                            }                            
                         }
                     }).start();
                     
                     this.gameStarted = true;
                 }
-        
+                
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -124,6 +148,8 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             }
         }).start();
         
+        // Total ship cells = 20 (1*2 + 2*2 + 3*2 + 4*2)
+        // Check if all ship cells has been hitted
         new Thread(() -> {
             while(!gameOver) {
                 try {
@@ -158,7 +184,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                     
                     amountShip[0]++;
                 } else if (amountShip[0] >= 2) {
-                    JOptionPane.showMessageDialog(null, amountMessage);
+                    displayMessage(amountMessage);
                 }
             break;
                 
@@ -208,7 +234,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                     }
                 } else if (amountShip[1] >= 2) {
-                    JOptionPane.showMessageDialog(null, amountMessage);
+                    displayMessage(amountMessage);
                 }
             break;
                 
@@ -266,7 +292,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                     }
                 } else if (amountShip[2] >= 2) {
-                    JOptionPane.showMessageDialog(null, amountMessage);
+                    displayMessage(amountMessage);
                 }
     
             break;
@@ -333,7 +359,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                     }
                 } else if (amountShip[3] >= 2) {
-                    JOptionPane.showMessageDialog(null, amountMessage);
+                    displayMessage(amountMessage);
                 }                
             break;
                 
@@ -354,12 +380,12 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                     }
                     
                     if (position.isClicked()) { 
-                        JOptionPane.showMessageDialog(null, invalidMessage);
+                        displayMessage(invalidMessage);
                         return false;
                     }
                 }
             } catch (java.lang.ArrayIndexOutOfBoundsException e) {
-                JOptionPane.showMessageDialog(null, invalidMessage);
+                displayMessage(invalidMessage);
                 return false;
             }    
         }
@@ -370,28 +396,34 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private void attack(Cell[][] table, int row, int col) {
         Cell position = enemyTable[row][col];
         
-        if (!position.isShotted()) {
-            if (!"0".equals(position.getCellName())) {
-                if (position.getCellName().contains("S")) {                
-                    position.getButton().setBackground(submarine);                
-                } else if (position.getCellName().contains("H")) {
-                    position.getButton().setBackground(shipTwo);
-                } else if (position.getCellName().contains("I")) {
-                    position.getButton().setBackground(shipThree);
-                } else if (position.getCellName().contains("P")) {
-                    position.getButton().setBackground(shipFour);
+        // Verificar o turno
+        if (isMyTurn()) {
+            if (!position.isShotted()) {
+                if (!"0".equals(position.getCellName())) {
+                    if (position.getCellName().contains("S")) {                
+                        position.getButton().setBackground(submarine);                
+                    } else if (position.getCellName().contains("H")) {
+                        position.getButton().setBackground(shipTwo);
+                    } else if (position.getCellName().contains("I")) {
+                        position.getButton().setBackground(shipThree);
+                    } else if (position.getCellName().contains("P")) {
+                        position.getButton().setBackground(shipFour);
+                    }
+
+                    setShipsHitted(getShipsHitted() + 1);
+                    position.setShotted(true);
+                } else {
+                    position.getButton().setVisible(false);
                 }
 
-                setShipsHitted(getShipsHitted() + 1);
-                position.setShotted(true);
+                attacks++;
+                position.setCellName(position.getCellName() + "X");
+                updateTable();
             } else {
-                position.getButton().setVisible(false);
+                displayMessage("Você já atirou aqui!");
             }
-
-            position.setCellName(position.getCellName() + "X");
-            updateTable();
         } else {
-            displayMessage("Você já atirou aqui!");
+            displayMessage("Não é seu turno!");
         }
     }
 
@@ -583,13 +615,35 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         
         writer.println(table);
     }
+
     
     /*
-     * public methods
+     *  Public Methods
      */
 
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public void setTurn(boolean turn) {
+        this.myTurn = turn;
+    }
+    
     public boolean isGameOver() {
         return this.gameOver;
+    }
+
+    public void gameOver() throws IOException {
+        gameOver = true;
+        
+        writer.close();
+        
+        reader.close();
+        
+        connection.close();
+        
+        this.dispose();
+        System.exit(0);
     }
     
     public void setShipsHitted(int shipsHitted) {
@@ -654,9 +708,11 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 table[row][col].getButton().addActionListener((ActionEvent e) -> {
                     if (table == userTable) {
                         if (position.isClicked()) {
-                            JOptionPane.showMessageDialog(null, "Posição inválida");
+                            displayMessage(invalidMessage);
                         } else if ( shipLength != 0 ) {
                             putShip(table, finalRow, finalCol);
+                        } else if ( shipLength == 0) {
+                            displayMessage("Selecione um barco");
                         }
                     } else if (table == enemyTable && ready) {
                         attack(table, finalRow, finalCol);
@@ -666,23 +722,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 panel.add(btn);
             }
         }
-
+        
         getContentPane().add(panel);
     }
-
-    public void gameOver() throws IOException {
-        gameOver = true;
-        
-        writer.close();
-        
-        reader.close();
-        
-        connection.close();
-        
-        this.dispose();
-        System.exit(0);
-    }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -697,6 +739,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         btnReady = new javax.swing.JButton();
         yourIP = new javax.swing.JLabel();
         enemyIP = new javax.swing.JLabel();
+        labelTurn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(880, 500));
@@ -710,9 +753,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             }
         });
 
+        yourIP.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
         yourIP.setText("xxx.xxx.xxx.xxx");
 
         enemyIP.setText("xxx.xxx.xxx.xxx");
+
+        labelTurn.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        labelTurn.setText("É a vez de ...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -726,18 +773,23 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(yourIP)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 420, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
                         .addComponent(enemyIP)
-                        .addGap(29, 29, 29))))
+                        .addGap(29, 29, 29))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(labelTurn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGap(20, 20, 20)
+                .addComponent(labelTurn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(yourIP)
                     .addComponent(enemyIP))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 482, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
                 .addComponent(btnReady)
                 .addContainerGap())
         );
@@ -746,12 +798,14 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadyActionPerformed
-        if (amountShip[0] == 2 && amountShip[1] == 2 && amountShip[2] == 2 && amountShip[3] == 2) {
+        if (amountShip[0] == 2 && amountShip[1] == 2 && amountShip[2] == 2 && amountShip[3] == 2 && !ready) {
             writer.println("READY");
             sendTable();
             setReady(true);            
+        } else if (ready) { 
+            displayMessage("Você já está pronto!");
         } else {
-            JOptionPane.showMessageDialog(null, "Você ainda não posicionou todos os barcos");
+            displayMessage("Você ainda não posicionou todos os barcos");
         }
     }//GEN-LAST:event_btnReadyActionPerformed
 
@@ -759,6 +813,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private javax.swing.JButton btnReady;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel enemyIP;
+    private javax.swing.JLabel labelTurn;
     private javax.swing.JLabel yourIP;
     // End of variables declaration//GEN-END:variables
 }
