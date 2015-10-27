@@ -85,6 +85,9 @@ public class Inbox implements Runnable {
                 } else if(message.equals("YOUR TURN")) {
                     iface.setTurn(true);
                     iface.displayMessage("É seu turno!");
+                } else if(message.equals("WIN")) {
+                    iface.displayMessage("Seu oponente desistiu! Você ganhou");
+                    iface.gameOver();
                 }
             } catch (SocketException ex) {
                 try {

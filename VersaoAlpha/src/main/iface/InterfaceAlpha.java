@@ -8,7 +8,6 @@ package main.iface;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -740,6 +739,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         yourIP = new javax.swing.JLabel();
         enemyIP = new javax.swing.JLabel();
         labelTurn = new javax.swing.JLabel();
+        btnLose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(880, 500));
@@ -761,6 +761,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         labelTurn.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         labelTurn.setText("É a vez de ...");
 
+        btnLose.setText("Desistir");
+        btnLose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -769,16 +776,18 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnReady)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(yourIP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
                         .addComponent(enemyIP)
                         .addGap(29, 29, 29))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelTurn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnReady)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLose)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -790,7 +799,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                     .addComponent(yourIP)
                     .addComponent(enemyIP))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
-                .addComponent(btnReady)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnReady)
+                    .addComponent(btnLose))
                 .addContainerGap())
         );
 
@@ -809,7 +820,23 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnReadyActionPerformed
 
+    private void btnLoseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoseActionPerformed
+        int answer = JOptionPane.showConfirmDialog(null, "Você realmente quer desistir?");
+        
+        if (answer == JOptionPane.YES_OPTION) {
+            gameOver = true;
+            writer.println("WIN");
+
+            try {
+                gameOver();
+            } catch (IOException ex) {
+                Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnLoseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLose;
     private javax.swing.JButton btnReady;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel enemyIP;
