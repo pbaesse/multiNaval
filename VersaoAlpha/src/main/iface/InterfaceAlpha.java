@@ -5,27 +5,21 @@
  */
 package main.iface;
 
-import java.awt.GridLayout;
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import main.resources.Inbox;
+import main.helper_classes.*;
 import main.resources.SocketAddressSpliter;
 
 /**
  *
  * @author luann
  */
-public class InterfaceAlpha extends javax.swing.JFrame {
+public class InterfaceAlpha extends JFrame {
 
     /**
      * Attributes
@@ -63,6 +57,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private final Color water = Color.BLUE;
     private final int[] amountShip = new int[4];
     private JPanel shipPanel;
+    private Jukebox jukebox = new Jukebox();
     
     /**
      * Creates new form InterfaceAlpha
@@ -153,6 +148,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             while(!gameOver) {
                 try {
                     if (getShipsHitted() == 20) {
+                        playSound("/home/luann/Downloads/trompete.wav");
                         displayMessage("Você venceu!");
                         writer.println("LOSE");
                         gameOver();
@@ -160,7 +156,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                     
                     Thread.sleep(1000);
                 
-                } catch (InterruptedException | IOException ex) {
+                } catch (InterruptedException ex) {
                     Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -411,8 +407,10 @@ public class InterfaceAlpha extends javax.swing.JFrame {
 
                     setShipsHitted(getShipsHitted() + 1);
                     position.setShotted(true);
+                    playSound("../resources/shotNotLoud.wav");
                 } else {
-                    position.getButton().setVisible(false);
+                    position.getButton().setVisible(false);                   
+                    playSound("../resources/waterExplosion.wav");
                 }
 
                 attacks++;
@@ -615,6 +613,10 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         writer.println(table);
     }
 
+    public void playSound(String file) {
+        System.out.println(file);
+        jukebox.play(this.getClass().getResource(file).getPath());
+    } 
     
     /*
      *  Public Methods
@@ -632,17 +634,23 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         return this.gameOver;
     }
 
-    public void gameOver() throws IOException {
-        gameOver = true;
-        
-        writer.close();
-        
-        reader.close();
-        
-        connection.close();
-        
-        this.dispose();
-        System.exit(0);
+    public void gameOver() {
+        try {
+            playSound("/resources/gameOver.wav");
+            
+            gameOver = true;
+            
+            writer.close();
+            
+            reader.close();
+            
+            connection.close();
+            
+            this.dispose();
+            System.exit(0);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public void setShipsHitted(int shipsHitted) {
@@ -826,12 +834,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         if (answer == JOptionPane.YES_OPTION) {
             gameOver = true;
             writer.println("WIN");
-
-            try {
-                gameOver();
-            } catch (IOException ex) {
-                Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            gameOver();
         }
     }//GEN-LAST:event_btnLoseActionPerformed
 

@@ -3,6 +3,7 @@ package main;
 import java.io.*;
 import java.net.*;
 import main.iface.*;
+import main.helper_classes.*;
 
 /**
  *
@@ -12,12 +13,14 @@ public class Launcher extends javax.swing.JFrame {
 
     private String ip;
     private int port;
+    private final Jukebox jukebox;
     
     /**
      * Creates new form Launcher
      */
     public Launcher() {
         initComponents();
+        jukebox = new Jukebox();
     }
 
     /**
@@ -105,6 +108,7 @@ public class Launcher extends javax.swing.JFrame {
         try {
             skt = new ServerSocket(3128);
             connection = skt.accept();
+            jukebox.play(this.getClass().getResource("resources/connect.wav").getPath());
             
             System.out.println("Conectado ao ip " + connection.getInetAddress().getHostAddress());    
             
@@ -122,6 +126,7 @@ public class Launcher extends javax.swing.JFrame {
         
         try {
             Socket connection = new Socket(ip, port);
+            jukebox.play(this.getClass().getResource("resources/connect.wav").getPath());
             this.dispose();
             new InterfaceAlpha(connection, false).setVisible(true);
         } catch (IOException ex) {
