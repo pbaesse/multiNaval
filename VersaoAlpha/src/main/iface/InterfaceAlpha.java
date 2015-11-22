@@ -5,26 +5,38 @@
  */
 package main.iface;
 
-import java.awt.*;
-import java.io.*;
-import javax.swing.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.helper_classes.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import main.helper_classes.Inbox;
+import main.helper_classes.Jukebox;
 import main.resources.SocketAddressSpliter;
 
 /**
  *
  * @author luann
  */
-public class InterfaceAlpha extends JFrame {
+public class InterfaceAlpha extends javax.swing.JFrame {
 
     /**
      * Attributes
      */
     private Cell[][] userTable = new Cell[11][11];
+    private Jukebox jukebox;
     
     private final Cell[][] enemyTable;
 
@@ -54,10 +66,9 @@ public class InterfaceAlpha extends JFrame {
     private final Color shipThree = Color.GREEN;
     private final Color shipFour = Color.CYAN;
     private final Color shotted = Color.RED;
-    private final Color water = Color.BLUE;
+    private final Color water = new Color(41,95,140);
     private final int[] amountShip = new int[4];
     private JPanel shipPanel;
-    private Jukebox jukebox = new Jukebox();
     
     /**
      * Creates new form InterfaceAlpha
@@ -66,9 +77,16 @@ public class InterfaceAlpha extends JFrame {
      * @throws java.io.IOException
      */
     public InterfaceAlpha(Socket connection, boolean iStart) throws IOException {
+        setContentPane(new JLabel(new ImageIcon("resources/tables.png")));
         initComponents();
+        btnReady.setBackground(new Color(160,95,63));
+        btnLose.setBackground(new Color(160,95,63));
+        btnReady.setBorderPainted(false);
+        btnLose.setBorderPainted(false);
         
         if (iStart) myTurn = true;
+        
+        jukebox = new Jukebox();
         
         this.connection = connection;
         
@@ -148,7 +166,6 @@ public class InterfaceAlpha extends JFrame {
             while(!gameOver) {
                 try {
                     if (getShipsHitted() == 20) {
-                        playSound("/home/luann/Downloads/trompete.wav");
                         displayMessage("Você venceu!");
                         writer.println("LOSE");
                         gameOver();
@@ -179,7 +196,7 @@ public class InterfaceAlpha extends JFrame {
                     
                     amountShip[0]++;
                 } else if (amountShip[0] >= 2) {
-                    displayMessage(amountMessage);
+                    displayMessage(amountMessage);                    
                 }
             break;
                 
@@ -230,6 +247,7 @@ public class InterfaceAlpha extends JFrame {
                     }
                 } else if (amountShip[1] >= 2) {
                     displayMessage(amountMessage);
+                                       
                 }
             break;
                 
@@ -407,10 +425,10 @@ public class InterfaceAlpha extends JFrame {
 
                     setShipsHitted(getShipsHitted() + 1);
                     position.setShotted(true);
-                    playSound("../resources/shotNotLoud.wav");
+                    playSound("shotNotLoud.wav");
                 } else {
-                    position.getButton().setVisible(false);                   
-                    playSound("../resources/waterExplosion.wav");
+                    position.getButton().setVisible(false);
+                    playSound("waterExplosion.wav");
                 }
 
                 attacks++;
@@ -428,11 +446,15 @@ public class InterfaceAlpha extends JFrame {
         shipPanel = new JPanel();
         shipPanel.setLayout(new GridLayout(4, 4));
         shipPanel.setBounds(380, 90, 120, 110);
+        shipPanel.setBackground(new Color(160,95,63));
         
         btnSideShips = new JButton();
         btnSideShips.setText("Vertical");
         btnSideShips.setBounds(380, 210, 120, 30);
         btnSideShips.setVisible(true);
+        btnSideShips.setBackground(new Color(41,95,140));
+        btnSideShips.setBorderPainted(false);
+        btnSideShips.setForeground(Color.WHITE);
         getContentPane().add(btnSideShips);
         
         btnSideShips.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -455,7 +477,7 @@ public class InterfaceAlpha extends JFrame {
                 btn.setBackground(shipTwo); 
                 btn.setName("btnShipTwo" + (i+1));
                 cellSpace = 2;
-            } else if (i == 15) { 
+            } else if (i == 15) {
                 btn.setBackground(submarine); 
                 btn.setName("btnSubmarine");
                 cellSpace = 1;
@@ -526,6 +548,7 @@ public class InterfaceAlpha extends JFrame {
                             btn.setBackground(submarine);
                             btn.setName("btnSubmarine");
                             cellSpace = 1;
+                            if(amountShip[0] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 7: case 10: case 11: case 13: case 14: case 15:
@@ -570,7 +593,9 @@ public class InterfaceAlpha extends JFrame {
                         break;
                             
                         case 15:
-                            btn.setBackground(submarine);
+                            if(amountShip[0] < 2){btn.setBackground(submarine);}
+                            else{btn.setBackground(shotted);}
+                            
                             btn.setName("btnSubmarine");
                             cellSpace = 1;
                         break;
@@ -613,10 +638,6 @@ public class InterfaceAlpha extends JFrame {
         writer.println(table);
     }
 
-    public void playSound(String file) {
-        System.out.println(file);
-        jukebox.play(this.getClass().getResource(file).getPath());
-    } 
     
     /*
      *  Public Methods
@@ -636,14 +657,10 @@ public class InterfaceAlpha extends JFrame {
 
     public void gameOver() {
         try {
-            playSound("/resources/gameOver.wav");
-            
             gameOver = true;
             
-            writer.close();
-            
+            writer.close();            
             reader.close();
-            
             connection.close();
             
             this.dispose();
@@ -700,7 +717,9 @@ public class InterfaceAlpha extends JFrame {
 
         for (int row = 0; row < 11; row++) {
             for (int col = 0; col < 11; col++) {
-                JButton btn = new JButton();
+                JPanel btn = new JPanel();
+                btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+                btn.setBackground(water);
                 table[row][col] = new Cell();
 
                 /* Transform into final values for use on inner class */
@@ -712,17 +731,19 @@ public class InterfaceAlpha extends JFrame {
                 position.setButton(btn);
                 position.setCellName("0");
 
-                table[row][col].getButton().addActionListener((ActionEvent e) -> {
-                    if (table == userTable) {
-                        if (position.isClicked()) {
-                            displayMessage(invalidMessage);
-                        } else if ( shipLength != 0 ) {
-                            putShip(table, finalRow, finalCol);
-                        } else if ( shipLength == 0) {
-                            displayMessage("Selecione um barco");
+                table[row][col].getButton().addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) { 
+                        if (table == userTable) {
+                            if (position.isClicked()) {
+                                displayMessage(invalidMessage);
+                            } else if ( shipLength != 0 ) {
+                                putShip(table, finalRow, finalCol);
+                            } else if ( shipLength == 0) {
+                                displayMessage("Selecione um barco");
+                            }
+                        } else if (table == enemyTable && ready) {
+                            attack(table, finalRow, finalCol);
                         }
-                    } else if (table == enemyTable && ready) {
-                        attack(table, finalRow, finalCol);
                     }
                 });
 
@@ -732,6 +753,11 @@ public class InterfaceAlpha extends JFrame {
         
         getContentPane().add(panel);
     }
+    
+    public void playSound(String filename) {
+        jukebox.play("resources/" + filename + "/");
+    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -754,6 +780,7 @@ public class InterfaceAlpha extends JFrame {
         setMinimumSize(new java.awt.Dimension(880, 500));
         setPreferredSize(new java.awt.Dimension(880, 500));
 
+        btnReady.setForeground(new java.awt.Color(255, 255, 255));
         btnReady.setText("Pronto");
         btnReady.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -762,13 +789,17 @@ public class InterfaceAlpha extends JFrame {
         });
 
         yourIP.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
+        yourIP.setForeground(new java.awt.Color(255, 255, 255));
         yourIP.setText("xxx.xxx.xxx.xxx");
 
+        enemyIP.setForeground(new java.awt.Color(255, 255, 255));
         enemyIP.setText("xxx.xxx.xxx.xxx");
 
         labelTurn.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        labelTurn.setForeground(new java.awt.Color(255, 255, 255));
         labelTurn.setText("É a vez de ...");
 
+        btnLose.setForeground(new java.awt.Color(255, 255, 255));
         btnLose.setText("Desistir");
         btnLose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -834,6 +865,7 @@ public class InterfaceAlpha extends JFrame {
         if (answer == JOptionPane.YES_OPTION) {
             gameOver = true;
             writer.println("WIN");
+
             gameOver();
         }
     }//GEN-LAST:event_btnLoseActionPerformed
@@ -846,4 +878,5 @@ public class InterfaceAlpha extends JFrame {
     private javax.swing.JLabel labelTurn;
     private javax.swing.JLabel yourIP;
     // End of variables declaration//GEN-END:variables
+
 }

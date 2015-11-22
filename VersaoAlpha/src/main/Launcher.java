@@ -3,7 +3,6 @@ package main;
 import java.io.*;
 import java.net.*;
 import main.iface.*;
-import main.helper_classes.*;
 
 /**
  *
@@ -13,14 +12,12 @@ public class Launcher extends javax.swing.JFrame {
 
     private String ip;
     private int port;
-    private final Jukebox jukebox;
     
     /**
      * Creates new form Launcher
      */
     public Launcher() {
         initComponents();
-        jukebox = new Jukebox();
     }
 
     /**
@@ -104,11 +101,9 @@ public class Launcher extends javax.swing.JFrame {
     private void btnWaitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWaitActionPerformed
         ServerSocket skt;
         Socket connection;
-        
         try {
             skt = new ServerSocket(3128);
             connection = skt.accept();
-            jukebox.play(this.getClass().getResource("resources/connect.wav").getPath());
             
             System.out.println("Conectado ao ip " + connection.getInetAddress().getHostAddress());    
             
@@ -126,7 +121,6 @@ public class Launcher extends javax.swing.JFrame {
         
         try {
             Socket connection = new Socket(ip, port);
-            jukebox.play(this.getClass().getResource("resources/connect.wav").getPath());
             this.dispose();
             new InterfaceAlpha(connection, false).setVisible(true);
         } catch (IOException ex) {
@@ -138,30 +132,7 @@ public class Launcher extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Launcher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Launcher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Launcher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Launcher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(() -> {
             new Launcher().setVisible(true);
         });

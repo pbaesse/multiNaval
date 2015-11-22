@@ -1,15 +1,15 @@
 package main.iface;
 
-import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class Cell {
-    private JButton button;
+    private JPanel button;
     private boolean isClicked;
     private boolean isShotted;
     private String cellName;
 
     public Cell() { 
-        button = new JButton();
+        button = new JPanel();
         isClicked = false;
         isShotted = false;
     }
@@ -22,11 +22,11 @@ public class Cell {
         return cellName;
     }
     
-    public JButton getButton() {
+    public JPanel getButton() {
         return button;
     }
 
-    public void setButton(JButton button) {
+    public void setButton(JPanel button) {
         this.button = button;
     }
     

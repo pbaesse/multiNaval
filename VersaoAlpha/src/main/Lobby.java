@@ -2,7 +2,7 @@ package main;
 
 import java.io.IOException;
 import javax.swing.DefaultListModel;
-import main.helper_classes.*;
+import main.resources.KnockNetwork;
 
 /**
  * @author luann
@@ -24,24 +24,35 @@ public final class Lobby extends javax.swing.JFrame {
             DefaultListModel list = new DefaultListModel();
             DefaultListModel oldList = new DefaultListModel();
 
-            for (String host : new KnockNetwork("10.164.5", 500).run()) {
-                list.addElement(host);
+            try {
+                for (String host : new KnockNetwork("10.164.5", 500).run()) {
+                    list.addElement(host);
+                }
+
+                serverList.setModel(list);
+                oldList = list;
+            } catch (IOException ex) {
+                System.out.println("Erro no update: " + ex);
             }
-            serverList.setModel(list);
-            oldList = list;
-            
+
             while (true) {
-                for (String host : new KnockNetwork("10.164.3", 500).run()) {
-                    if (!list.contains(host)) {
-                        list.addElement(host);
-                        modified = true;
+                try {
+                    for (String host : new KnockNetwork("10.164.3", 500).run()) {
+                        if (!list.contains(host)) {
+                            list.addElement(host);
+                            modified = true;
+                        }
                     }
+
+                    System.out.println("Old List: " + oldList);
+
+                    if (modified) {
+                        serverList.setModel(list);
+                    }
+                } catch (IOException ex) {
+                    System.out.println("Erro no update: " + ex);
                 }
-                System.out.println("Old List: " + oldList);
-                if (modified) {
-                    serverList.setModel(list);
-                }
-                
+
                 oldList = list;
                 modified = false;
             }

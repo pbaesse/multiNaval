@@ -47,7 +47,7 @@ public class Inbox implements Runnable {
         Cell[][] UserTable = iface.getUserTable();
         int counter = 1;
 
-        iface.playSound("../resources/shotNotLoud.wav");
+        iface.playSound("shotNotLoud.wav");
         for (int row = 0; row < 11; row++) {
             for (int col = 0; col < 11; col++) {
                 if (UserTable[row][col].getCellName().equals(elements[counter])) {
@@ -86,12 +86,12 @@ public class Inbox implements Runnable {
                     iface.setTurn(true);
                     iface.displayMessage("É seu turno!");
                 } else if (message.equals("WIN")) {
-                    iface.playSound("../resources/win.wav");
+                    iface.playSound("win.wav");
                     iface.displayMessage("Seu oponente desistiu! Você ganhou");
                     iface.gameOver();
                 }
             } catch (java.lang.NullPointerException | IOException ex) {
-                iface.playSound("../resources/win.wav");
+                iface.playSound("win.wav");
                 iface.displayMessage("Seu oponente saiu. Você ganhou!");
                 iface.gameOver();
             }
