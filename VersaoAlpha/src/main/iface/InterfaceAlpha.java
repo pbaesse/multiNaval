@@ -10,13 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,12 +64,14 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private int shipLength;
     private int shipsHitted;
     private JButton btnSideShips;
+    private JButton[] selectShip = new JButton[16]; 
     private final Color submarine = Color.YELLOW;
     private final Color shipTwo = Color.ORANGE;
     private final Color shipThree = Color.GREEN;
     private final Color shipFour = Color.CYAN;
     private final Color shotted = Color.RED;
     private final Color water = new Color(41,95,140);
+    private BufferedImage[] h,v;
     private final int[] amountShip = new int[4];
     private JPanel shipPanel;
     
@@ -77,7 +82,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
      * @throws java.io.IOException
      */
     public InterfaceAlpha(Socket connection, boolean iStart) throws IOException {
-        setContentPane(new JLabel(new ImageIcon("resources/tables.png")));
+        setContentPane(new JLabel(new ImageIcon("resources/images/tables.png")));
         initComponents();
         btnReady.setBackground(new Color(160,95,63));
         btnLose.setBackground(new Color(160,95,63));
@@ -186,12 +191,15 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         switch (shipLength) {
             case 1:
                 if (amountShip[0] < 2 && checkPosition(table, x, y)) {
-                    table[x][y].getButton().setBackground(submarine);
+                    String s="";
+                    if(side == "Horizontal"){s = "h";}
+                    if(side == "Vertical"){s = "v";}
+                    table[x][y].getButton().setIcon(new ImageIcon(loadImages(s,"submarino",0)));
                     table[x][y].setClicked(true);
                     
                     switch (amountShip[0]) {
-                        case 0: table[x][y].setCellName("SA"); break;
-                        case 1: table[x][y].setCellName("SB"); break;                            
+                        case 0: table[x][y].setCellName("SAH"); break;
+                        case 1: table[x][y].setCellName("SBV"); maximumAmount(0); break;
                     }
                     
                     amountShip[0]++;
@@ -204,9 +212,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 if (amountShip[1] < 2 && checkPosition(table, x, y)) {
                     switch (side) {
                         case "Horizontal":
-                            table[x][y].getButton().setBackground(shipTwo);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("h","b2p1",1)));
                             table[x][y].setClicked(true);
-                            table[x][y + 1].getButton().setBackground(shipTwo);
+                            table[x][y + 1].getButton().setIcon(new ImageIcon(loadImages("h","b2p2",2)));
                             table[x][y + 1].setClicked(true);
                             
                             switch(amountShip[1]) {
@@ -218,6 +226,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                 case 1:
                                     table[x][y].setCellName("HB1");
                                     table[x][y + 1].setCellName("HB2");
+                                    maximumAmount(1);
                                 break;
                             }
                             
@@ -225,9 +234,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                             
                         case "Vertical":
-                            table[x][y].getButton().setBackground(shipTwo);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("v","b2p2",1)));
                             table[x][y].setClicked(true);
-                            table[x + 1][y].getButton().setBackground(shipTwo);
+                            table[x + 1][y].getButton().setIcon(new ImageIcon(loadImages("v","b2p1",1)));
                             table[x + 1][y].setClicked(true);
                             
                             switch(amountShip[1]) {
@@ -239,6 +248,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                 case 1:
                                     table[x][y].setCellName("HB1");
                                     table[x + 1][y].setCellName("HB2");
+                                    maximumAmount(1);
                                 break;
                             }
                             
@@ -255,11 +265,11 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 if (amountShip[2] < 2 && checkPosition(table, x, y)) {
                     switch (side) {
                         case "Horizontal":
-                            table[x][y].getButton().setBackground(shipThree);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("h","b3p1",3)));
                             table[x][y].setClicked(true);
-                            table[x][y + 1].getButton().setBackground(shipThree);
+                            table[x][y + 1].getButton().setIcon(new ImageIcon(loadImages("h","b3p2",4)));
                             table[x][y + 1].setClicked(true);
-                            table[x][y + 2].getButton().setBackground(shipThree);
+                            table[x][y + 2].getButton().setIcon(new ImageIcon(loadImages("h","b3p3",5)));
                             table[x][y + 2].setClicked(true);
                             
                             switch(amountShip[2]) {
@@ -273,6 +283,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                     table[x][y].setCellName("IB1");
                                     table[x][y + 1].setCellName("IB2");
                                     table[x][y + 2].setCellName("IB3");
+                                    maximumAmount(2);
                                 break;
                             }
                             
@@ -280,11 +291,11 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                         
                         case "Vertical":
-                            table[x][y].getButton().setBackground(shipThree);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("v","b3p3",3)));
                             table[x][y].setClicked(true);
-                            table[x + 1][y].getButton().setBackground(shipThree);
+                            table[x + 1][y].getButton().setIcon(new ImageIcon(loadImages("v","b3p2",3)));
                             table[x + 1][y].setClicked(true);
-                            table[x + 2][y].getButton().setBackground(shipThree);
+                            table[x + 2][y].getButton().setIcon(new ImageIcon(loadImages("v","b3p1",3)));
                             table[x + 2][y].setClicked(true);
                             
                             switch(amountShip[2]) {
@@ -298,6 +309,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                     table[x][y].setCellName("IB1");
                                     table[x + 1][y].setCellName("IB2");
                                     table[x + 2][y].setCellName("IB3");
+                                    maximumAmount(2);
                                 break;
                             }
                             
@@ -314,13 +326,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 if (amountShip[3] < 2 && checkPosition(table, x, y)) {
                     switch (side) {
                         case "Horizontal":
-                            table[x][y].getButton().setBackground(shipFour);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("h","b4p1",6)));
                             table[x][y].setClicked(true);
-                            table[x][y + 1].getButton().setBackground(shipFour);
+                            table[x][y + 1].getButton().setIcon(new ImageIcon(loadImages("h","b4p2",7)));
                             table[x][y + 1].setClicked(true);
-                            table[x][y + 2].getButton().setBackground(shipFour);
+                            table[x][y + 2].getButton().setIcon(new ImageIcon(loadImages("h","b4p3",8)));
                             table[x][y + 2].setClicked(true);
-                            table[x][y + 3].getButton().setBackground(shipFour);
+                            table[x][y + 3].getButton().setIcon(new ImageIcon(loadImages("h","b4p4",9)));
                             table[x][y + 3].setClicked(true);
                             
                             switch(amountShip[3]) {
@@ -336,6 +348,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                     table[x][y + 1].setCellName("PB2");
                                     table[x][y + 2].setCellName("PB3");
                                     table[x][y + 3].setCellName("PB4");
+                                    maximumAmount(3);
                                 break;
                             }
                             
@@ -343,13 +356,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         break;
                             
                         case "Vertical":
-                            table[x][y].getButton().setBackground(shipFour);
+                            table[x][y].getButton().setIcon(new ImageIcon(loadImages("v","b4p4",6)));
                             table[x][y].setClicked(true);
-                            table[x + 1][y].getButton().setBackground(shipFour);
+                            table[x + 1][y].getButton().setIcon(new ImageIcon(loadImages("v","b4p3",6)));
                             table[x + 1][y].setClicked(true);
-                            table[x + 2][y].getButton().setBackground(shipFour);
+                            table[x + 2][y].getButton().setIcon(new ImageIcon(loadImages("v","b4p2",6)));
                             table[x + 2][y].setClicked(true);
-                            table[x + 3][y].getButton().setBackground(shipFour);
+                            table[x + 3][y].getButton().setIcon(new ImageIcon(loadImages("v","b4p1",6)));
                             table[x + 3][y].setClicked(true);
                             
                             switch(amountShip[3]) {
@@ -365,6 +378,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                                     table[x + 1][y].setCellName("PB2");
                                     table[x + 2][y].setCellName("PB3");
                                     table[x + 3][y].setCellName("PB4");
+                                    maximumAmount(3);
                                 break;
                             }
                             
@@ -413,7 +427,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         if (isMyTurn()) {
             if (!position.isShotted()) {
                 if (!"0".equals(position.getCellName())) {
-                    if (position.getCellName().contains("S")) {                
+                    if (position.getCellName().contains("S")) {
                         position.getButton().setBackground(submarine);                
                     } else if (position.getCellName().contains("H")) {
                         position.getButton().setBackground(shipTwo);
@@ -462,36 +476,38 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         });
         
         for (int i = 0; i < 4 * 4; i++ ) {
-            JButton btn = new JButton();
+            selectShip[i] = new JButton();
             int cellSpace = 0;
             
             if (i < 4) { 
-                btn.setBackground(shipFour);
-                btn.setName("btnShipFour" + (i+1));
+                selectShip[i].setBackground(shipFour);
+                selectShip[i].setName("btnShipFour" + (i+1));
                 cellSpace = 4;
             } else if (i < 8 && i > 4) { 
-                btn.setBackground(shipThree); 
-                btn.setName("btnShipThree" + (i+1));
+                selectShip[i].setBackground(shipThree); 
+                selectShip[i].setName("btnShipThree" + (i+1));
                 cellSpace = 3;
             } else if (i < 12 && i > 9) { 
-                btn.setBackground(shipTwo); 
-                btn.setName("btnShipTwo" + (i+1));
+                selectShip[i].setBackground(shipTwo); 
+                selectShip[i].setName("btnShipTwo" + (i+1));
                 cellSpace = 2;
             } else if (i == 15) {
-                btn.setBackground(submarine); 
-                btn.setName("btnSubmarine");
+                selectShip[i].setBackground(submarine); 
+                selectShip[i].setName("btnSubmarine");
                 cellSpace = 1;
             } else { 
-                btn.setVisible(false);
+                selectShip[i].setVisible(false);
             }
             
             int shipLengthFinal = cellSpace;
             
-            btn.addActionListener((java.awt.event.ActionEvent evt) -> {
+            selectShip[i].addActionListener((java.awt.event.ActionEvent evt) -> {
                 selectShip(shipLengthFinal);
             });
             
-            shipPanel.add(btn);
+            //selectShip[i] = btn;
+            
+            shipPanel.add(selectShip[i]);
         }
         
         getContentPane().add(shipPanel);
@@ -530,18 +546,21 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                             btn.setBackground(shipFour);
                             btn.setName("btnShipFour" + (i+1));
                             cellSpace = 4;
+                            if(amountShip[3] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 1: case 5: case 9:
                             btn.setBackground(shipThree);
                             btn.setName("btnShipThree" + (i+1));
                             cellSpace = 3;
+                            if(amountShip[2] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 2: case 6:
                             btn.setBackground(shipTwo);
                             btn.setName("btnShipTwo" + (i+1));
                             cellSpace = 2;
+                            if(amountShip[1] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 3:
@@ -562,7 +581,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         selectShip(shipLengthFinal);
                     });
                     
-                    shipPanel.add(btn);
+                    selectShip[i] = btn;
+                    
+                    shipPanel.add(selectShip[i]);
                 }   
                 this.btnSideShips.setText("Horizontal");
                 this.side = "Vertical";
@@ -578,26 +599,28 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                             btn.setBackground(shipFour);
                             btn.setName("btnShipFour" + (i+1));
                             cellSpace = 4;
+                            if(amountShip[3] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 5: case 6: case 7:
                             btn.setBackground(shipThree);
                             btn.setName("btnShipThree" + (i+1));
                             cellSpace = 3;
+                            if(amountShip[2] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 10: case 11:
                             btn.setBackground(shipTwo);
                             btn.setName("btnShipTwo" + (i+1));
                             cellSpace = 2;
+                            if(amountShip[1] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 15:
-                            if(amountShip[0] < 2){btn.setBackground(submarine);}
-                            else{btn.setBackground(shotted);}
-                            
+                            btn.setBackground(submarine);
                             btn.setName("btnSubmarine");
                             cellSpace = 1;
+                            if(amountShip[0] == 2){btn.setBackground(shotted);}
                         break;
                             
                         case 4: case 8: case 9: case 12: case 13: case 14: 
@@ -611,7 +634,9 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         selectShip(shipLengthFinal);
                     });
 
-                shipPanel.add(btn);
+                    selectShip[i] = btn;
+                    
+                    shipPanel.add(selectShip[i]);
             }   
                 this.btnSideShips.setText("Vertical");
                 this.side = "Horizontal";
@@ -637,7 +662,53 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         
         writer.println(table);
     }
-
+    
+    private void maximumAmount(int i){
+        switch (btnSideShips.getText()) {
+            case "Vertical":
+                switch(i){
+                    case 0:
+                        selectShip[15].setBackground(shotted);
+                    break;
+                    case 1:
+                        selectShip[10].setBackground(shotted);
+                        selectShip[11].setBackground(shotted);
+                    break;
+                    case 2:
+                        selectShip[5].setBackground(shotted);
+                        selectShip[6].setBackground(shotted);
+                        selectShip[7].setBackground(shotted);
+                    break;
+                    case 3:
+                        selectShip[0].setBackground(shotted);
+                        selectShip[1].setBackground(shotted);
+                        selectShip[2].setBackground(shotted);
+                        selectShip[3].setBackground(shotted);
+                    break;
+                }break;
+            case "Horizontal":
+                switch(i){
+                    case 0:
+                        selectShip[3].setBackground(shotted);
+                    break;
+                    case 1:
+                        selectShip[2].setBackground(shotted);
+                        selectShip[6].setBackground(shotted);
+                    break;
+                    case 2:
+                        selectShip[1].setBackground(shotted);
+                        selectShip[5].setBackground(shotted);
+                        selectShip[9].setBackground(shotted);
+                    break;
+                    case 3:
+                        selectShip[0].setBackground(shotted);
+                        selectShip[4].setBackground(shotted);
+                        selectShip[8].setBackground(shotted);
+                        selectShip[12].setBackground(shotted);
+                    break;
+                }break;  
+        }
+    }
     
     /*
      *  Public Methods
@@ -711,13 +782,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     }    
     
     public final void createTable(int x, int y, JPanel panel, Cell[][] table) {
-        panel.setBounds(x, y, 330, 300);
+        panel.setBounds(x, y, 330, 298);
         panel.setLayout(new GridLayout(11, 11));
         panel.setBackground(water);
 
         for (int row = 0; row < 11; row++) {
             for (int col = 0; col < 11; col++) {
-                JPanel btn = new JPanel();
+                JButton btn = new JButton();
                 btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 btn.setBackground(water);
                 table[row][col] = new Cell();
@@ -731,19 +802,17 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 position.setButton(btn);
                 position.setCellName("0");
 
-                table[row][col].getButton().addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) { 
-                        if (table == userTable) {
-                            if (position.isClicked()) {
-                                displayMessage(invalidMessage);
-                            } else if ( shipLength != 0 ) {
-                                putShip(table, finalRow, finalCol);
-                            } else if ( shipLength == 0) {
-                                displayMessage("Selecione um barco");
-                            }
-                        } else if (table == enemyTable && ready) {
-                            attack(table, finalRow, finalCol);
+                table[row][col].getButton().addActionListener((ActionEvent e) -> {
+                    if (table == userTable) {
+                        if (position.isClicked()) {
+                            displayMessage(invalidMessage);
+                        } else if ( shipLength != 0 ) {
+                            putShip(table, finalRow, finalCol);
+                        } else if ( shipLength == 0) {
+                            displayMessage("Selecione um barco");
                         }
+                    } else if (table == enemyTable && ready) {
+                        attack(table, finalRow, finalCol);
                     }
                 });
 
@@ -757,7 +826,42 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     public void playSound(String filename) {
         jukebox.play("resources/" + filename + "/");
     }
-
+    
+    public BufferedImage loadImages(String side,String imgName,int vlr){
+        /* Valores
+        "submarino",0;
+        "b2p1",1;
+        "b2p2",2;
+        "b3p1",3;
+        "b3p2",4;
+        "b3p3",5;
+        "b4p1",6;
+        "b4p2",7;
+        "b4p3",8;
+        "b4p4,9; */
+        
+        h = new BufferedImage[10];
+        v = new BufferedImage[10];
+        
+        switch(side){
+            case "h":
+                try {
+                    h[vlr] = ImageIO.read(getClass().getResource("ships/h/" + imgName + ".png"));
+                    return h[vlr];
+                } catch (IOException ex) {
+                    Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
+                } break;
+            case "v":
+                try {
+                    v[vlr] = ImageIO.read(getClass().getResource("ships/v/" + imgName + ".png"));
+                    return v[vlr];
+                } catch (IOException ex) {
+                    Logger.getLogger(InterfaceAlpha.class.getName()).log(Level.SEVERE, null, ex);
+                } break;    
+        }
+        
+        return null;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.

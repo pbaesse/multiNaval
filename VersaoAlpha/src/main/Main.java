@@ -14,7 +14,7 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
-        setContentPane(new JLabel(new ImageIcon("resources/background.png")));
+        setContentPane(new JLabel(new ImageIcon("resources/images/background.png")));
         setSize(392,177);
         initComponents();
         
@@ -80,6 +80,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnterRoomActionPerformed
 
     private void btnCreateRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRoomActionPerformed
+        setVisible(false);
         new main.iface.CreateRoom();
         this.dispose();
     }//GEN-LAST:event_btnCreateRoomActionPerformed
