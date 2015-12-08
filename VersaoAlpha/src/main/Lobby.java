@@ -2,7 +2,7 @@ package main;
 
 import java.io.IOException;
 import javax.swing.DefaultListModel;
-import main.resources.KnockNetwork;
+import main.helper_classes.KnockNetwork;
 
 /**
  * @author luann

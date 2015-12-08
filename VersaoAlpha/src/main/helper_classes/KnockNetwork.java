@@ -1,9 +1,8 @@
-package main.resources;
+package main.helper_classes;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 
 /**
  *

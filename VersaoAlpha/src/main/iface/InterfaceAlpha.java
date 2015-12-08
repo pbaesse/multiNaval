@@ -8,11 +8,8 @@ package main.iface;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -27,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import main.helper_classes.Inbox;
 import main.helper_classes.Jukebox;
-import main.resources.SocketAddressSpliter;
+import main.helper_classes.SocketAddressSpliter;
 
 /**
  *
@@ -39,7 +36,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
      * Attributes
      */
     private Cell[][] userTable = new Cell[11][11];
-    private Jukebox jukebox;
+    private final Jukebox jukebox;
     
     private final Cell[][] enemyTable;
 
@@ -64,7 +61,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private int shipLength;
     private int shipsHitted;
     private JButton btnSideShips;
-    private JButton[] selectShip = new JButton[16]; 
+    private final JButton[] selectShip = new JButton[16]; 
     private final Color submarine = Color.YELLOW;
     private final Color shipTwo = Color.ORANGE;
     private final Color shipThree = Color.GREEN;
@@ -170,7 +167,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         new Thread(() -> {
             while(!gameOver) {
                 try {
-                    if (getShipsHitted() == 20) {
+                    if (getShipsHitted() >= 20) {
                         displayMessage("Você venceu!");
                         writer.println("LOSE");
                         gameOver();

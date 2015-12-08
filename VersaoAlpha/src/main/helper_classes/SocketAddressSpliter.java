@@ -1,10 +1,10 @@
-package main.resources;
+package main.helper_classes;
 
 import java.net.SocketAddress;
 
 /**
- *
  * @author luann
+ * Class that converts an SocketAddress to an host address (IP)
  */
 public class SocketAddressSpliter {
 
@@ -13,7 +13,6 @@ public class SocketAddressSpliter {
     public SocketAddressSpliter(SocketAddress address) {
         String socketAddress = String.valueOf(address).replace("/", "");
         String[] datas = socketAddress.split(":");
-        String IP = datas[0];
-        this.IP = IP;
+        this.IP = datas[0];
     }    
 }

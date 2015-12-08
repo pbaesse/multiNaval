@@ -3,7 +3,6 @@ package main;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import main.helper_classes.Jukebox;
 
 public class Main extends javax.swing.JFrame {
 

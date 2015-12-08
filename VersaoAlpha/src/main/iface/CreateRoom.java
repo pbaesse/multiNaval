@@ -18,11 +18,15 @@ public class CreateRoom extends javax.swing.JFrame {
         waitOponent();
         
     }
+    
     public void waitOponent(){
         ServerSocket skt;
         Socket connection;
         try {
+            // Cria um Servidor
             skt = new ServerSocket(3128);
+            
+            // Faz com que esse servidor passe a aceitar conexões
             connection = skt.accept();
             
             System.out.println("Conectado ao ip " + connection.getInetAddress().getHostAddress());    
