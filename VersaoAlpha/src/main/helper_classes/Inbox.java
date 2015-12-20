@@ -75,7 +75,8 @@ public class Inbox implements Runnable {
                     
                 // else if, the cell's name is equivalent to a hit water cell
                 } else if (elements[counter].equals("0X")) {
-                    UserTable[row][col].getButton().setVisible(false);
+                    //UserTable[row][col].getButton().setVisible(false);
+                    UserTable[row][col].getButton().setBackground(new java.awt.Color(25, 42, 88));
                     UserTable[row][col].setCellName("X");
                 }
 
