@@ -35,7 +35,7 @@ Jadson Luan Soares da Silva (<a href="https://github.com/JLuann">JLuann</a>), Je
 Licence
 -------
 
-Read the license file <a href="https://github.com/jkbrzt/httpie/blob/master/LICENSE">here</a>.
+Read the license file <a href="https://github.com/pbaesse/multiNaval/blob/master/LICENSE">here</a>.
 
 Contact
 -------
