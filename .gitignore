@@ -1,3 +1,7 @@
-/VersaoAlpha (2)/nbproject/private/
-/VersaoAlpha (2)/build/
-/.project
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.nb-gradle/
