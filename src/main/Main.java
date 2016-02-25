@@ -3,16 +3,16 @@ package main;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import main.iface.InterfaceAlpha;
 
 public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
-        
+     
         setTitle("MultiNaval - Multiplayer Battleship");
         setResizable(false);
         setLocationRelativeTo(null);
-        setVisible(true);
         setContentPane(new JLabel(new ImageIcon("resources/images/background.png")));
         setSize(392,177);
         initComponents();

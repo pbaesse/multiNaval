@@ -40,7 +40,7 @@ public class Inbox implements Runnable {
      */
     private void createEnemyTable(String table) throws IOException {
         String[] elements = table.split(" ");
-        iface.createTable(520, 90, iface.getEnemyPanel(), iface.getEnemyTable());
+        iface.createTable(525, 95, iface.getEnemyPanel(), iface.getEnemyTable());
         Cell[][] enemyTable = iface.getEnemyTable();
         int counter = 1;
 
@@ -72,7 +72,7 @@ public class Inbox implements Runnable {
                 // cell's name contains X (it means that this cell was hit)
                 } else if (!elements[counter].equals("0X") && elements[counter].contains("X")) {
                     // set the button icon image
-                    UserTable[row][col].getButton().setIcon(new ImageIcon(iface.loadImages('x',"",0)));
+                    UserTable[row][col].getButton().setIcon(new ImageIcon(iface.loadImages("bLost")));
                     
                 // else if, the cell's name is equivalent to a hit water cell
                 } else if (elements[counter].equals("0X")) {
