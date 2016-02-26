@@ -24,8 +24,8 @@ How to install
 --------------
 
 Download the archive .rar of the project and extract in a folder. Then just 
-run the .jar file. To run the archive .jar, it will be necessary to have 
-the JRE in your pc.
+run the .jar file. To run the archive .jar, it will be necessary have 
+the JRE version 1.8 or a higher version installed in your pc.
 
 Authors
 -------
