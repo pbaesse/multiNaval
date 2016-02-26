@@ -465,6 +465,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 if(attacks == 3){displayMessage("Agora é a vez do oponente!");}
                 
                 position.setCellName(position.getCellName() + "X");
+                position.getButton().setEnabled(false);
                 updateTable();
             } else {
                 displayMessage("Você já atirou aqui!");
