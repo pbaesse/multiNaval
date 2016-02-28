@@ -12,19 +12,20 @@ the connection library called Sockets.
 Known bugs
 ----------
 
-If after two shots , the player quickly click twice more, he will be able to 
+If after two shots , the player quickly click twice more, he will be able to
 shoot more than is allowed, which is three times.
 
-Possible improviments
+Possible improvements
 ---------------------
 
-A timer, for measure the time during movement (in the battle).
+A timer, for measure the time during movement (in the battle);
+More ways to find a server (A player waiting to play).
 
 How to install
 --------------
 
-Download the archive .rar of the project and extract in a folder. Then just 
-run the .jar file. To run the archive .jar, it will be necessary to have 
+Download the compressed archive of the project and extract in a folder. Then just
+run the .jar file. To run the archive .jar, it will be necessary to have
 the JRE in your pc.
 
 Authors
@@ -43,5 +44,3 @@ Contact
 <a href="https://github.com/pbaesse">pbaesse</a>                                                       
 <a href="https://github.com/JLuann">JLuann</a>                                                 
 <a href="https://github.com/jeron7">jeron7</a>
-
-
