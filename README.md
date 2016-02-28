@@ -3,7 +3,7 @@
 Projeto Integrador em Santa Cruz sobre uma batalha naval multiplayer
 
 What is it?
------------
+----------
 
 MultiNaval is a multiplayer BattleShip game developed with Java. The GUI was
 made with a graphic library called SWING and the multiplayer connection with
@@ -19,6 +19,7 @@ Possible improvements
 ---------------------
 
 A timer, for measure the time during movement (in the battle);
+
 More ways to find a server (A player waiting to play).
 
 How to install
