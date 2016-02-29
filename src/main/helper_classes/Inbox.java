@@ -100,8 +100,8 @@ public class Inbox implements Runnable {
                 } else if (message.contains("UPDATE")) {
                     compareTable(message);
                 } else if (message.equals("LOSE")) {
-                    iface.displayMessage("Você perdeu!");
                     iface.gameOver();
+                    iface.displayMessage("Você perdeu!");
                     reader.close();
                     connection.close();
                 } else if (message.equals("YOUR TURN")) {
