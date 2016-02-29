@@ -10,9 +10,6 @@ import main.iface.Cell;
 import main.iface.InterfaceAlpha;
 
 /**
- *
- * @author luann
- * 
  * Class that receives messages from the another client and
  * then does something based on the message received
  */
@@ -32,11 +29,10 @@ public class Inbox implements Runnable {
     }
     
     /**
+     * Método que transforma a mensagem recebida do outro client e então cria o
+     * tabuleiro inimigo de acordo com a mensagem;
      * @param table
      * @throws IOException 
-     * 
-     * Method that transform the String message received from the another client
-     * and then create the enemy's table based on the message
      */
     private void createEnemyTable(String table) throws IOException {
         String[] elements = table.split(" ");
@@ -53,8 +49,8 @@ public class Inbox implements Runnable {
     }
 
     /**
+     * Método que faz a comparação entre sua tabela antes e depois de ser atacada;     
      * @param message 
-     * Method that does an comparation between your table before an attack and after an attack
      */
     private void compareTable(String message) {
         // an array with all cell's names 
@@ -100,8 +96,8 @@ public class Inbox implements Runnable {
                 } else if (message.contains("UPDATE")) {
                     compareTable(message);
                 } else if (message.equals("LOSE")) {
-                    iface.gameOver();
                     iface.displayMessage("Você perdeu!");
+                    iface.gameOver();
                     reader.close();
                     connection.close();
                 } else if (message.equals("YOUR TURN")) {

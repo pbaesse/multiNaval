@@ -98,8 +98,8 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         this.reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         createThreads();        
         
-        yourIP.setText(new SocketAddressSpliter(connection.getLocalSocketAddress()).IP);
-        enemyIP.setText(new SocketAddressSpliter(connection.getRemoteSocketAddress()).IP);
+        yourIP.setText("Você");
+        enemyIP.setText("Oponente");
         
         repaint();
         revalidate();
@@ -128,17 +128,18 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                         while(!gameOver) {
                             
                             if (myTurn) {
-                                labelTurn.setText("Turno: você");
+                                enemyIP.setForeground(Color.WHITE);
+                                yourIP.setForeground(Color.GREEN);
                                 
                                 if (attacks >= 3) {
                                     myTurn = false;                                    
                                     writer.println("YOUR TURN");
                                     attacks = 0;
                                     yourIP.setFocusable(false);
-                                    labelTurn.setText("Turno: oponente");
                                 }
                             } else {
-                                labelTurn.setText("Turno: oponente");
+                                enemyIP.setForeground(Color.GREEN);
+                                yourIP.setForeground(Color.WHITE);
                             }
                                 
                             repaint();
@@ -169,7 +170,7 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             while(!gameOver) {
                 try {
                     if (getShipsHitted() >= 20) {
-                        yourIP.setText("Você venceu");
+                        displayMessage("Você venceu");
                         writer.println("LOSE");
                         gameOver();
                     }
@@ -1006,7 +1007,6 @@ public class InterfaceAlpha extends javax.swing.JFrame {
         btnReady = new javax.swing.JButton();
         yourIP = new javax.swing.JLabel();
         enemyIP = new javax.swing.JLabel();
-        labelTurn = new javax.swing.JLabel();
         btnLose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1022,16 +1022,13 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             }
         });
 
-        yourIP.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
+        yourIP.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         yourIP.setForeground(new java.awt.Color(255, 255, 255));
-        yourIP.setText("xxx.xxx.xxx.xxx");
+        yourIP.setText("Você");
 
+        enemyIP.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         enemyIP.setForeground(new java.awt.Color(255, 255, 255));
-        enemyIP.setText("xxx.xxx.xxx.xxx");
-
-        labelTurn.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        labelTurn.setForeground(new java.awt.Color(255, 255, 255));
-        labelTurn.setText("É a vez de ...");
+        enemyIP.setText("Oponente");
 
         btnLose.setForeground(new java.awt.Color(255, 255, 255));
         btnLose.setText("Desistir");
@@ -1050,28 +1047,23 @@ public class InterfaceAlpha extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(yourIP)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(enemyIP)
-                        .addGap(29, 29, 29))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(labelTurn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addGap(36, 36, 36))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnReady)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLose)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(571, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(labelTurn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(yourIP)
-                    .addComponent(enemyIP))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(enemyIP)
+                    .addComponent(yourIP))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 508, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReady)
                     .addComponent(btnLose))
@@ -1109,7 +1101,6 @@ public class InterfaceAlpha extends javax.swing.JFrame {
     private javax.swing.JButton btnReady;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel enemyIP;
-    private javax.swing.JLabel labelTurn;
     private javax.swing.JLabel yourIP;
     // End of variables declaration//GEN-END:variables
 
