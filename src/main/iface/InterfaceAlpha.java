@@ -170,8 +170,8 @@ public class InterfaceAlpha extends javax.swing.JFrame {
             while(!gameOver) {
                 try {
                     if (getShipsHitted() >= 20) {
-                        displayMessage("Você venceu");
                         writer.println("LOSE");
+                        displayMessage("Você venceu");
                         gameOver();
                     }
                     

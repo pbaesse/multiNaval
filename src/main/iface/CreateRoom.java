@@ -44,49 +44,29 @@ public class CreateRoom extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblPort = new javax.swing.JLabel();
-        yourIP1 = new javax.swing.JLabel();
         yourIP2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblPort.setForeground(new java.awt.Color(255, 255, 255));
-        lblPort.setText("Port:");
-        lblPort.setMaximumSize(new java.awt.Dimension(40, 14));
-        lblPort.setMinimumSize(new java.awt.Dimension(40, 14));
-
-        yourIP1.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
-        yourIP1.setForeground(new java.awt.Color(255, 255, 255));
-        yourIP1.setText("3128");
-
         yourIP2.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         yourIP2.setForeground(new java.awt.Color(255, 255, 255));
-        yourIP2.setText("Esperando oponete...");
+        yourIP2.setText("Esperando oponente...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(yourIP2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(yourIP1)))
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addGap(92, 92, 92)
+                .addComponent(yourIP2)
+                .addContainerGap(113, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(38, 38, 38)
                 .addComponent(yourIP2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(yourIP1))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
@@ -94,8 +74,6 @@ public class CreateRoom extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblPort;
-    private javax.swing.JLabel yourIP1;
     private javax.swing.JLabel yourIP2;
     // End of variables declaration//GEN-END:variables
 }

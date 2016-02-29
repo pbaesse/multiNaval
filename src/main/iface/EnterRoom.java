@@ -8,7 +8,6 @@ import main.iface.*;
 public class EnterRoom extends javax.swing.JFrame {
     
     private String ip;
-    private int port;
     
     public EnterRoom() {
         setTitle("Procurando sala...");
@@ -29,9 +28,7 @@ public class EnterRoom extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         lblIP = new javax.swing.JLabel();
-        lblPort = new javax.swing.JLabel();
         digitedIP = new javax.swing.JTextField();
-        digitedPort = new javax.swing.JTextField();
         btnConnect = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -50,16 +47,9 @@ public class EnterRoom extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblIP.setForeground(new java.awt.Color(255, 255, 255));
-        lblIP.setText("IP:");
-
-        lblPort.setForeground(new java.awt.Color(255, 255, 255));
-        lblPort.setText("Port:");
-        lblPort.setMaximumSize(new java.awt.Dimension(40, 14));
-        lblPort.setMinimumSize(new java.awt.Dimension(40, 14));
+        lblIP.setText("Server IP:");
 
         digitedIP.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        digitedPort.setPreferredSize(new java.awt.Dimension(100, 20));
 
         btnConnect.setForeground(new java.awt.Color(255, 255, 255));
         btnConnect.setText("Conectar");
@@ -74,17 +64,15 @@ public class EnterRoom extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblIP))
+                .addGap(20, 20, 20)
+                .addComponent(lblIP)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConnect)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(digitedIP, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                        .addComponent(digitedPort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addComponent(digitedIP, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnConnect)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,18 +80,12 @@ public class EnterRoom extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(lblPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblIP)))
+                        .addComponent(lblIP))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(digitedIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(digitedPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnConnect)))
+                        .addComponent(digitedIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnConnect)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -112,10 +94,9 @@ public class EnterRoom extends javax.swing.JFrame {
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         ip = digitedIP.getText();
-        port = Integer.parseInt(digitedPort.getText());
         
         try {
-            Socket connection = new Socket(ip, port);
+            Socket connection = new Socket(ip, 3128);
             this.dispose();
             new InterfaceAlpha(connection, false).setVisible(true);
         } catch (IOException ex) {
@@ -126,10 +107,8 @@ public class EnterRoom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConnect;
     private javax.swing.JTextField digitedIP;
-    private javax.swing.JTextField digitedPort;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblIP;
-    private javax.swing.JLabel lblPort;
     // End of variables declaration//GEN-END:variables
 }
